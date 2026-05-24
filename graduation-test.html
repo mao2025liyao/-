@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>毕业告别风格测试 · 青春答卷</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* 避免拖动干扰，不影响文本选择 */
+        }
+
+        body {
+            background: linear-gradient(145deg, #fff9ef 0%, #ffe6cf 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            padding: 1.5rem;
+        }
+
+        /* 主卡片容器 */
+        .test-container {
+            max-width: 780px;
+            width: 100%;
+            background: #ffffffdd;
+            backdrop-filter: blur(2px);
+            border-radius: 64px 48px 64px 48px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 215, 170, 0.5);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* 头部装饰 */
+        .test-header {
+            background: #ffd9b5;
+            padding: 1.5rem 2rem 1rem 2rem;
+            text-align: center;
+            border-bottom: 2px dashed #ffb882;
+        }
+
+        .test-header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #78481a;
+            letter-spacing: -0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .test-header h1 span {
+            background: #fff2e4;
+            padding: 0 12px;
+            border-radius: 60px;
+            font-size: 1.4rem;
+        }
+
+        .sub {
+            color: #b45f2b;
+            margin-top: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* 问题区域和结果区域切换 */
+        .quiz-panel, .result-panel {
+            padding: 2rem 2rem 2rem 2rem;
+            transition: 0.2s;
+        }
+
+        .result-panel {
+            text-align: center;
+        }
+
+        /* 进度条 */
+        .progress-area {
+            margin-bottom: 1.2rem;
+            padding: 0 0.25rem;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #b47c48;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-bg {
+            height: 8px;
+            background: #ffdec2;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #ff9f6e;
+            border-radius: 20px;
+            transition: width 0.3s ease;
+        }
+
+        /* 题目卡片 */
+        .question-card {
+            background: #fffaf5;
+            border-radius: 48px;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.8rem;
+            border: 1px solid #ffe3cf;
+        }
+
+        .q-text {
+            font-size: 1.6rem;
+            font-weight: 650;
+            color: #3e2a1f;
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 12px;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+
+        .q-num {
+            background: #ffb06f;
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        /* 选项列表 */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            background: white;
+            border-radius: 100px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid #ffe0ca;
+            transition: all 0.2s;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .option-item:hover {
+            background: #fff2e8;
+            border-color: #ffb882;
+            transform: scale(0.99);
+        }
+
+        .option-prefix {
+            font-weight: 800;
+            background: #ffefe3;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+            color: #bc672e;
+            font-size: 1rem;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4c351f;
+            line-height: 1.3;
+        }
+
+        .option-score {
+            font-size: 0.7rem;
+            background: #f5e2d2;
+            padding: 3px 10px;
+            border-radius: 30px;
+            color: #9b5a2c;
+            font-weight: 600;
+        }
+
+        /* 按钮们 */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            gap: 15px;
+        }
+
+        button {
+            background: #ffcfaa;
+            border: none;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #5a3418;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        button.primary {
+            background: #ff9f6e;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 125, 50, 0.3);
+        }
+
+        button.primary:hover {
+            background: #ff874b;
+            transform: translateY(-2px);
+        }
+
+        button.secondary:hover {
+            background: #ffe0c4;
+            transform: scale(0.97);
+        }
+
+        /* 结果区域可爱样式 */
+        .result-badge {
+            background: #fff0e2;
+            border-radius: 64px;
+            padding: 1.6rem 1rem;
+            margin: 20px 0;
+        }
+
+        .result-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #b3511a;
+            margin-bottom: 8px;
+        }
+
+        .result-desc {
+            font-size: 1.15rem;
+            color: #63381b;
+            background: #ffffffb3;
+            border-radius: 48px;
+            padding: 18px;
+            margin-top: 16px;
+            line-height: 1.4;
+        }
+
+        .score-show {
+            background: #ffdcc0;
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .reset-btn {
+            background: #ffe1c6;
+            margin-top: 25px;
+            padding: 12px 28px;
+            font-weight: 700;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            padding: 1rem;
+            color: #c28655;
+            border-top: 1px solid #ffdfc7;
+        }
+
+        @media (max-width: 550px) {
+            .test-container {
+                border-radius: 36px;
+            }
+            .q-text {
+                font-size: 1.25rem;
+            }
+            .option-text {
+                font-size: 0.85rem;
+            }
+            .result-title {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="test-container" id="app">
+    <div class="test-header">
+        <h1>
+            🎓 告别风格测试
+            <span>毕业季限定</span>
+        </h1>
+        <div class="sub">你的青春终章，是哪一种告白方式？</div>
+    </div>
+
+    <!-- 动态面板 -->
+    <div id="quizPanel" class="quiz-panel">
+        <div class="progress-area">
+            <div class="progress-text">
+                <span>📖 回忆进度</span>
+                <span id="progressCounter">0 / 12</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div id="questionContainer">
+            <!-- 动态渲染题目 -->
+        </div>
+
+        <div class="nav-buttons">
+            <button id="prevBtn" class="secondary" style="visibility: hidden;">◀ 上一题</button>
+            <button id="nextBtn" class="primary">下一题 ▶</button>
+        </div>
+    </div>
+
+    <div id="resultPanel" class="result-panel" style="display: none;">
+        <!-- 结果动态生成 -->
+    </div>
+    <footer>🍃 每一道选择，都是时光的回响 · 记得好好告别</footer>
+</div>
+
+<script>
+    // ---------- 题目数据 ----------
+    const questions = [
+        { text: "离校前最后一顿饭，你会怎么吃？", options: [
+            { text: "细嚼慢咽，吃到食堂阿姨开始拖地", score: 1 },
+            { text: "拍照修图发朋友圈，配文写了一版又一版", score: 2 },
+            { text: "和每个路过的人碰杯，笑着说以后常联系", score: 3 },
+            { text: "一个人坐在角落，安安静静吃完就走", score: 4 }
+        ]},
+        { text: "收拾宿舍时，翻出一张大一的军训照片，你会？", options: [
+            { text: "拍下来发给当年的室友，附赠三个大哭表情包", score: 1 },
+            { text: "看了很久，然后夹进某本书里，不说一句话", score: 2 },
+            { text: "发到宿舍群，配文：“这是哪个黑煤窑来的难民？”", score: 3 },
+            { text: "默默收好，心想：算了，回不去了", score: 4 }
+        ]},
+        { text: "如果要和大学说再见，你更倾向于哪种方式？", options: [
+            { text: "大醉一场，把不敢说的话全倒出来", score: 1 },
+            { text: "写一封长长的信，但不一定会发出去", score: 2 },
+            { text: "最后去一次图书馆、操场、常走的那条路", score: 3 },
+            { text: "和平常一样，假装明天还会再来", score: 4 }
+        ]},
+        { text: "你觉得大学四年像什么？", options: [
+            { text: "一场还没准备好就结束了的梦", score: 1 },
+            { text: "一本翻得太快的书，结局有点潦草", score: 2 },
+            { text: "一顿吃饱了但还想再来一碗的饭", score: 3 },
+            { text: "一部自己演了自己也没看懂的电影", score: 4 }
+        ]},
+        { text: "告别时，你最害怕听到的一句话是？", options: [
+            { text: "“以后常联系” —— 因为知道不会了", score: 1 },
+            { text: "“保重” —— 太像永别了", score: 2 },
+            { text: "“其实我一直想对你说……” —— 太晚了", score: 3 },
+            { text: "“我先走了” —— 留下的那个最难过", score: 4 }
+        ]},
+        { text: "如果可以对18岁的自己说一句话，你会说？", options: [
+            { text: "别怕，该错过的还是会错过", score: 1 },
+            { text: "早点去图书馆，别在宿舍躺四年", score: 2 },
+            { text: "那个人的微信，加吧，不丢人", score: 3 },
+            { text: "你已经很棒了，真的", score: 4 }
+        ]},
+        { text: "毕业典礼结束后，你会做什么？", options: [
+            { text: "拉着最好的朋友去拍照，拍到手机没电", score: 1 },
+            { text: "一个人去常去的天台，吹最后一次晚风", score: 2 },
+            { text: "把学士帽扔得最高，笑得最大声", score: 3 },
+            { text: "悄悄把学士服叠好，放进行李箱最底层", score: 4 }
+        ]},
+        { text: "你的手机相册里，大学时期的照片有多少？", options: [
+            { text: "三千张以上，连食堂的番茄炒蛋都有特写", score: 1 },
+            { text: "一千张左右，每张都舍不得删", score: 2 },
+            { text: "几百张，主要是有人的，风景不多", score: 3 },
+            { text: "不到一百张，你不爱拍照，现在有点后悔", score: 4 }
+        ]},
+        { text: "如果散伙饭上有人哭了，你会？", options: [
+            { text: "跟着哭，哭得比他还大声", score: 1 },
+            { text: "递纸巾，不说话，轻轻拍拍他的背", score: 2 },
+            { text: "讲个笑话把大家逗笑，然后自己偷偷转头", score: 3 },
+            { text: "假装没看见，因为你也快忍不住了", score: 4 }
+        ]},
+        { text: "毕业后的第一年，你觉得你会最怀念什么？", options: [
+            { text: "食堂那碗只要五块钱的面", score: 1 },
+            { text: "宿舍夜聊到天亮的那些废话", score: 2 },
+            { text: "图书馆靠窗的那个固定座位", score: 3 },
+            { text: "那个你暗恋了四年却没敢开口的人", score: 4 }
+        ]},
+        { text: "如果要给大学写一句墓志铭，你会写？", options: [
+            { text: "“此地埋葬了我最好的四年”", score: 1 },
+            { text: "“谢谢你来过，虽然有点潦草”", score: 2 },
+            { text: "“未完待续……大概吧”", score: 3 },
+            { text: "“来过，爱过，吃过”", score: 4 }
+        ]},
+        { text: "最后离开宿舍的那一刻，你会？", options: [
+            { text: "回头看一眼，然后轻轻带上门", score: 1 },
+            { text: "在门口站很久，直到走廊灯灭了", score: 2 },
+            { text: "拍一张空荡荡的床铺，发朋友圈说“再见”", score: 3 },
+            { text: "头也不回地走了，因为你怕一回头就舍不得", score: 4 }
+        ]}
+    ];
+
+    // 分数映射风格 (保留原始范围)
+    const styleMap = [
+        { min: 44, max: 48, title: "🍃 体面告别官", desc: "你笑着和所有人拥抱，转身后眼泪才掉下来。温柔而体面，把最好的笑容留在毕业照里。" },
+        { min: 39, max: 43, title: "🧳 沉默行李箱", desc: "你说了最少的再见，哭了最长的夜。有些离别无声，却震耳欲聋。" },
+        { min: 34, max: 38, title: "🌙 操场夜奔者", desc: "最后那晚你在操场走了一圈又一圈，像在走这四年。每一步都是青春印记。" },
+        { min: 29, max: 33, title: "🥂 气氛组遗老", desc: "散伙饭没有你，酒杯都不会自己碰自己。你是离别里最闪亮的主心骨。" },
+        { min: 24, max: 28, title: "📸 回忆考古学家", desc: "你翻遍了每一张照片，试图证明青春真的存在过。那些旧时光被你妥帖收藏。" },
+        { min: 19, max: 23, title: "📝 朋友圈诗人", desc: "你的毕业文案改了十八版，最后只发了一个句号。所有的情绪都藏在省略号里。" },
+        { min: 14, max: 18, title: "📜 遗书收藏家", desc: "你总在深夜写长文，天亮前又悄悄删掉。敏感而深情的告别方式。" },
+        { min: 12, max: 13, title: "🍚 食堂钉子户", desc: "你赖到最后不是因为舍不得饭，是舍不得这些人。烟火气里藏了最重的感情。" }
+    ];
+
+    // 全局状态
+    let currentIndex = 0;           // 0-index
+    let answers = new Array(questions.length).fill(null);  // 存储每道题的得分
+    let selectedTemp = null;        // 当前题目临时选中分值(用于渲染高亮)
+
+    // DOM 元素
+    const quizPanel = document.getElementById('quizPanel');
+    const resultPanel = document.getElementById('resultPanel');
+    const questionContainer = document.getElementById('questionContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressCounterSpan = document.getElementById('progressCounter');
+    const progressFillDiv = document.getElementById('progressFill');
+
+    // 辅助函数: 更新进度条
+    function updateProgress() {
+        const answeredCount = answers.filter(a => a !== null).length;
+        progressCounterSpan.innerText = `${answeredCount} / ${questions.length}`;
+        const percent = (answeredCount / questions.length) * 100;
+        progressFillDiv.style.width = `${percent}%`;
+    }
+
+    // 根据总分获取风格对象
+    function getStyleByScore(score) {
+        for (let style of styleMap) {
+            if (score >= style.min && score <= style.max) return style;
+        }
+        // fallback
+        return { title: "🌱 青春收藏家", desc: "你的毕业故事独一无二，好好珍藏这份回忆。" };
+    }
+
+    // 计算总分并展示结果
+    function showFinalResult() {
+        let totalScore = 0;
+        for (let s of answers) {
+            if (s !== null) totalScore += s;
+        }
+        // 防止未答完理论上不会调用，但保障一下
+        if (answers.includes(null)) return;
+        
+        const style = getStyleByScore(totalScore);
+        // 构建结果HTML
+        const resultHtml = `
+            <div class="result-badge">
+                <div class="result-title">✨ ${style.title}</div>
+                <div class="score-show">🎓 你的告别得分：${totalScore} 分</div>
+                <div class="result-desc">💬 ${style.desc}</div>
+                <div style="margin-top: 24px; font-size: 0.9rem; background:#fff1e6; border-radius: 32px; padding: 12px;">
+                    🌟 无论哪种方式，告别都是新开始。祝你前程滚烫，闪闪发光。
+                </div>
+            </div>
+            <button id="restartBtn" class="reset-btn secondary">📖 再做一次 · 重走青春</button>
+        `;
+        resultPanel.innerHTML = resultHtml;
+        quizPanel.style.display = 'none';
+        resultPanel.style.display = 'block';
+        
+        const restartBtn = document.getElementById('restartBtn');
+        if (restartBtn) {
+            restartBtn.addEventListener('click', () => {
+                // 重置所有状态
+                answers.fill(null);
+                currentIndex = 0;
+                selectedTemp = null;
+                renderCurrentQuestion();
+                updateProgress();
+                quizPanel.style.display = 'block';
+                resultPanel.style.display = 'none';
+                // 重置按钮可见性
+                updateNavButtons();
+            });
+        }
+    }
+
+    // 渲染当前题目 (currentIndex)
+    function renderCurrentQuestion() {
+        const q = questions[currentIndex];
+        const savedScore = answers[currentIndex];  // 已选分值 或 null
+        // 当前题目选中的临时高亮 (如果已有保存就显示保存的，否则可能为null)
+        const activeScore = (savedScore !== null) ? savedScore : null;
+        
+        // 生成选项html
+        let optionsHtml = '';
+        q.options.forEach((opt, idx) => {
+            const isActive = (activeScore === opt.score);
+            const activeClass = isActive ? 'style="background: #ffe1cd; border-color:#ff9f6e; box-shadow: 0 2px 6px rgba(0,0,0,0.05);"' : '';
+            const prefixLetter = String.fromCharCode(65+idx); // A B C D
+            optionsHtml += `
+                <div class="option-item" data-score="${opt.score}" data-opt-index="${idx}" style="${activeClass}">
+                    <div class="option-prefix">${prefixLetter}</div>
+                    <div class="option-text">${escapeHtml(opt.text)}</div>
+                    <div class="option-score">${opt.score}分</div>
+                </div>
+            `;
+        });
+        
+        const questionHtml = `
+            <div class="question-card">
+                <div class="q-text">
+                    <span class="q-num">${currentIndex+1}</span>
+                    <span>${escapeHtml(q.text)}</span>
+                </div>
+                <div class="options-list" id="optionsList">
+                    ${optionsHtml}
+                </div>
+            </div>
+        `;
+        questionContainer.innerHTML = questionHtml;
+        
+        // 绑定选项点击事件
+        const optionDivs = document.querySelectorAll('.option-item');
+        optionDivs.forEach(optDiv => {
+            optDiv.addEventListener('click', (e) => {
+                const scoreVal = parseInt(optDiv.dataset.score, 10);
+                // 更新answers数组中的当前题目分值
+                answers[currentIndex] = scoreVal;
+                // 重新渲染当前题目，让高亮及时更新
+                renderCurrentQuestion();
+                updateProgress();
+                // 自动启用下一题按钮以及上一题逻辑刷新
+                updateNavButtons();
+                // 如果已经最后一题并且全部答完，可以自动触发展示结果? 让用户主动点击“提交”逻辑更好，但满足“下一题”到最后会出现“看结果”
+                // 在updateNavButtons中动态改变按钮文案和表现
+            });
+        });
+    }
+    
+    // 简单防XSS
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        }).replace(/[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+    
+    // 更新按钮状态、文案以及上一题可见性
+    function updateNavButtons() {
+        // 上一题可见性
+        if (currentIndex === 0) {
+            prevBtn.style.visibility = 'hidden';
+        } else {
+            prevBtn.style.visibility = 'visible';
+        }
+        
+        // 下一题 或 提交结果
+        const isLast = currentIndex === questions.length - 1;
+        const currentAnswered = answers[currentIndex] !== null;
+        
+        if (isLast) {
+            const allAnswered = answers.every(a => a !== null);
+            if (allAnswered) {
+                nextBtn.innerText = '🎉 查看告别风格 🎉';
+                nextBtn.classList.add('primary');
+            } else {
+                nextBtn.innerText = '📮 最后一题 · 选完看结果';
+                nextBtn.classList.add('primary');
+            }
+        } else {
+            nextBtn.innerText = '下一题 ▶';
+            nextBtn.classList.add('primary');
+        }
+        
+        // 如果当前未作答且不是最后一题，不禁用按钮但仍然允许跳转但给出提醒？为了体验不让跳转未作答但点一下提醒
+        // 我们将在点击事件中判断
+    }
+    
+    // 切换到上一题
+    function goPrev() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderCurrentQuestion();
+            updateNavButtons();
+        }
+    }
+    
+    // 下一题或提交
+    function goNextOrSubmit() {
+        // 如果当前题目未作答，轻提醒但不强制跳转
+        if (answers[currentIndex] === null) {
+            // 温柔提醒
+            alert('💌 请选择一个答案再继续吧～ 每个选择都是告别的记忆。');
+            return;
+        }
+        
+        const isLast = currentIndex === questions.length - 1;
+        if (isLast) {
+            // 检查是否全部作答
+            const allDone = answers.every(a => a !== null);
+            if (allDone) {
+                showFinalResult();
+            } else {
+                // 理论上最后一题刚选完 所有应该都为true，但可能由于一些奇奇怪怪, 再检查
+                if (answers.includes(null)) {
+                    alert('还有些题目没答完呢，请返回检查一下～ 每一段青春都值得被完整记录。');
+                } else {
+                    showFinalResult();
+                }
+            }
+        } else {
+            // 下一题
+            currentIndex++;
+            renderCurrentQuestion();
+            updateNavButtons();
+        }
+    }
+    
+    // 绑定按钮事件
+    function bindEvents() {
+        prevBtn.addEventListener('click', goPrev);
+        nextBtn.addEventListener('click', goNextOrSubmit);
+    }
+    
+    // 初始渲染
+    function init() {
+        bindEvents();
+        renderCurrentQuestion();
+        updateProgress();
+        updateNavButtons();
+    }
+    
+    init();
+</script>
+</body>
+</html>
